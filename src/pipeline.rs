@@ -268,7 +268,7 @@ fn build<D>(
             bind_group_layouts: &[&uniform_layout],
         });
 
-    let shader = device.create_shader_module(&wgpu::ShaderModuleDescriptor {
+    let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
         label: Some("Glyph Shader"),
         source: wgpu::ShaderSource::Wgsl(crate::Cow::Borrowed(include_str!(
             "shader/glyph.wgsl"
@@ -304,7 +304,7 @@ fn build<D>(
         fragment: Some(wgpu::FragmentState {
             module: &shader,
             entry_point: "fs_main",
-            targets: &[wgpu::ColorTargetState {
+            targets: &[Some(wgpu::ColorTargetState {
                 format: render_format,
                 blend: Some(wgpu::BlendState {
                     color: wgpu::BlendComponent {
@@ -319,7 +319,7 @@ fn build<D>(
                     },
                 }),
                 write_mask: wgpu::ColorWrites::ALL,
-            }],
+            })],
         }),
         multiview: None,
     });
@@ -361,14 +361,14 @@ fn draw<D>(
     let mut render_pass =
         encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("wgpu_glyph::pipeline render pass"),
-            color_attachments: &[wgpu::RenderPassColorAttachment {
+            color_attachments: &[Some(wgpu::RenderPassColorAttachment {
                 view: target,
                 resolve_target: None,
                 ops: wgpu::Operations {
                     load: wgpu::LoadOp::Load,
                     store: true,
                 },
-            }],
+            })],
             depth_stencil_attachment,
         });
 

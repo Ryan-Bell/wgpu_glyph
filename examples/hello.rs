@@ -43,7 +43,8 @@ fn main() -> Result<(), Box<dyn Error>> {
             format: render_format,
             width: size.width,
             height: size.height,
-            present_mode: wgpu::PresentMode::Mailbox,
+            present_mode: wgpu::PresentMode::Fifo,
+            alpha_mode: wgpu::CompositeAlphaMode::Auto,
         },
     );
 
@@ -77,7 +78,8 @@ fn main() -> Result<(), Box<dyn Error>> {
                         format: render_format,
                         width: size.width,
                         height: size.height,
-                        present_mode: wgpu::PresentMode::Mailbox,
+                        present_mode: wgpu::PresentMode::Fifo,
+                        alpha_mode: wgpu::CompositeAlphaMode::Auto,
                     },
                 );
             }
@@ -102,7 +104,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                         &wgpu::RenderPassDescriptor {
                             label: Some("Render pass"),
                             color_attachments: &[
-                                wgpu::RenderPassColorAttachment {
+                                Some(wgpu::RenderPassColorAttachment {
                                     view,
                                     resolve_target: None,
                                     ops: wgpu::Operations {
@@ -116,7 +118,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                                         ),
                                         store: true,
                                     },
-                                },
+                                }),
                             ],
                             depth_stencil_attachment: None,
                         },
